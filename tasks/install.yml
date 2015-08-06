@@ -1,0 +1,32 @@
+
+
+- name: Install package repositories
+  yum: name={{ item }}
+  with_items:
+  - epel-release
+  - http://yum.postgresql.org/9.4/redhat/rhel-6-x86_64/pgdg-redhat94-{{ postgresql_version }}-1.noarch.rpm
+
+
+- name: Install postgresql
+  yum: name={{ item }}
+  with_items:
+  - postgresql{{ postgresql_version | regex_replace('\.', '') }}-server
+  - postgresql{{ postgresql_version | regex_replace('\.', '') }}-contrib
+  - pv
+
+- name: Install Python
+  yum: name={{ item }}
+  with_items:
+  - python-pip
+  - python-devel
+  - libffi-devel
+  - openssl-devel
+
+- name: Install Wal-E
+  pip: name={{ item }}
+  with_items:
+  - msgpack-python
+  - wal-e
+  - pytz
+  - netifaces
+  - cryptography

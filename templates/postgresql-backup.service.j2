@@ -1,0 +1,18 @@
+[Unit]
+Description=Postgresql Backup (wal-e)
+
+[Service]
+User=postgres
+SyslogIdentifier=postgresql-backup
+
+Type=oneshot
+
+
+ExecStart=/usr/bin/bash -c "source {{ postgresql_prefix }}/bin/pg_env.sh && \
+                            export PATH=/usr/pgsql-{{ postgresql_version }}/bin/:$PATH && \
+                            wal-e backup-push {{ postgresql_prefix }}/data/ && \
+                            wal-e delete --confirm retain {{ postgresql_backup_retain_count }}"
+
+
+
+

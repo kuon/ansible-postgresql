@@ -1,0 +1,9 @@
+[Unit]
+Description=Postgresql Dump Backup
+
+[Timer]
+OnCalendar={{ item.frequency }}
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,48 @@
+
+- name: Create base pg directory
+  file: path={{ postgresql_prefix }} state=directory owner=postgres
+
+
+- name: Check if initdb has been run
+  command: ls {{ postgresql_prefix }}/data/PG_VERSION
+  register: result
+  ignore_errors: True
+
+- name: Init DB
+  command: /usr/pgsql-{{ postgresql_version }}/bin/initdb -E UTF-8 --locale=en_US.UTF-8 {{ postgresql_prefix }}/data
+  sudo_user: postgres
+  when: result|failed
+
+- name: Create configuration directory
+  file: path={{ postgresql_prefix }}/config state=directory owner=postgres
+
+- name: Main configuration
+  template: dest={{ postgresql_prefix }}/config/postgresql.conf src=postgresql.conf.j2 mode=600 owner=postgres
+
+- name: PG HBA
+  template: dest={{ postgresql_prefix }}/config/pg_hba.conf src=pg_hba.conf.j2 mode=700 owner=postgres
+
+- name: SSL certificate and key
+  template: dest={{ postgresql_prefix }}/config/server.{{ item }} src={{ postgresql_ssl_certificate_path }}.{{ item }} mode=600 owner=postgres
+  with_items:
+  - key
+  - crt
+
+
+- name: Create bin directory
+  file: path={{ postgresql_prefix }}/bin state=directory owner=postgres
+
+- name: PG scripts
+  template: dest={{ postgresql_prefix }}/bin/{{ item }}.sh src={{ item }}.sh.j2 mode=700 owner=postgres
+  with_items:
+  - pg_env
+  - pg_archive
+
+- name: Service file
+  template: dest=/etc/systemd/system/postgresql.service src=postgresql.service.j2
+
+
+- name: Enable service
+  service: name=postgresql state=running enabled=yes
+
+- include: configure_backups.yml

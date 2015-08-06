@@ -1,0 +1,8 @@
+- shell:
+
+    source {{ postgresql_prefix }}/bin/pg_env.sh
+
+    wal-e backup-push {{ postgresql_prefix }}/data
+
+  sudo_user: postgres
+

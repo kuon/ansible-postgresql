@@ -1,0 +1,9 @@
+---
+- include: install.yml
+  when: postgresql_action == 'setup'
+- include: configure.yml
+  when: postgresql_action == 'setup'
+- include: backup.yml
+  when: postgresql_action == 'backup'
+- include: restore.yml
+  when: postgresql_action == 'restore'

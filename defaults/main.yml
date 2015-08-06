@@ -1,0 +1,32 @@
+---
+postgresql_action: setup
+postgresql_prefix: /srv/pg
+
+postgresql_version: 9.4
+
+postgresql_max_connections: 100
+postgresql_shared_buffers: 150MB
+postgresql_effective_cache_size: 700MB
+postgresql_work_mem: 10MB
+postgresql_role: master
+postgresql_archiving_enabled: false
+postgresql_port: 5432
+
+
+postgresql_backup_frequency: daily
+postgresql_backup_retain_count: 4
+
+
+postgresql_aws_bucket: none
+
+postgresql_wale_s3_prefix: s3://none
+
+postgresql_aws_access_key_id: key
+postgresql_aws_secret_access_key: secret
+
+postgresql_aws_region: eu-west-1
+
+postgresql_dumper_databases: []
+
+postgresql_ssl_enabled: false
+postgresql_ssl_certificate_path: ''

@@ -1,0 +1,9 @@
+[Unit]
+Description=Postgresql Backup (wal-e)
+
+[Timer]
+OnCalendar={{ postgresql_backup_frequency }}
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,48 @@
+data_directory = '{{ postgresql_prefix }}/data'
+hba_file = '{{ postgresql_prefix }}/config/pg_hba.conf'
+
+
+timezone = 'UTC'
+unix_socket_directories = '/tmp'
+
+{% if postgresql_ssl_enabled %}
+ssl = 'true'
+ssl_cert_file = '{{ postgresql_prefix }}/config/server.crt'
+ssl_key_file = '{{ postgresql_prefix }}/config/server.key'
+{% endif %}
+
+
+listen_addresses = '*'
+max_connections = '{{ postgresql_max_connections }}'
+log_line_prefix = '%t '
+log_timezone = 'UTC'
+shared_buffers = '{{ postgresql_shared_buffers }}'
+datestyle = 'iso, mdy'
+lc_messages = 'en_US.UTF-8'
+lc_monetary = 'en_US.UTF-8'
+lc_numeric = 'en_US.UTF-8'
+lc_time = 'en_US.UTF-8'
+default_text_search_config = 'pg_catalog.english'
+archive_timeout = '300'
+checkpoint_segments = '32'
+effective_cache_size = '{{ postgresql_effective_cache_size }}'
+max_wal_senders = '5'
+random_page_cost = '1'
+seq_page_cost = '0.8'
+wal_buffers = '1MB'
+wal_keep_segments = '32'
+wal_level = 'hot_standby'
+work_mem = '{{ postgresql_work_mem }}'
+
+{% if postgresql_role == 'slave' %}
+hot_standby = 'on'
+{% endif %}
+
+port = '{{ postgresql_port }}'
+
+{% if postgresql_archiving_enabled %}
+archive_command = '{{ postgresql_prefix }}/bin/pg_archive.sh %p %f'
+archive_mode = 'on'
+{% endif %}
+
+

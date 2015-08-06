@@ -1,0 +1,21 @@
+[Unit]
+Description=PostgreSQL database service
+After=syslog.target network.target
+
+[Service]
+User=postgres
+
+SyslogIdentifier=postgresql
+Restart=always
+RestartSec=10
+
+TimeoutStartSec=0
+
+ExecStart=/usr/pgsql-{{ postgresql_version }}/bin/postgres \
+          -D {{ postgresql_prefix }}/data \
+          -c config_file={{ postgresql_prefix }}/config/postgresql.conf
+
+[Install]
+WantedBy=multi-user.target
+
+

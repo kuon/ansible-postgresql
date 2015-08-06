@@ -1,0 +1,17 @@
+[Unit]
+Description=Postgresql Dump Backup
+
+[Service]
+User=postgres
+SyslogIdentifier=postgresql-dumper-{{ item.name }}
+
+Type=oneshot
+
+
+ExecStart=/usr/bin/bash -c "source {{ postgresql_prefix }}/bin/pg_env.sh && \
+                            PATH=/usr/pgsql-{{ postgresql_version }}/bin/:$PATH \
+                            pg_s3_dumper -c backup -p -d {{ item.url }} -u {{ item.prefix }}"
+
+
+
+

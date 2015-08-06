@@ -1,0 +1,39 @@
+
+
+- name: Install ruby
+  yum: name=ruby
+
+- name: Install pg_s3_dumper
+  gem: name=pg_s3_dumper user_install=no version=0.1.4
+
+- name: Check existing units
+  shell: ls -1 /etc/systemd/system/postgresql-dump-*
+  register: existing_units
+  ignore_errors: true
+
+- name: Delete existing units
+  command: rm {{ item }}
+  with_items: existing_units.stdout_lines
+  when: existing_units
+
+- name: Service unit
+  template: dest=/etc/systemd/system/postgresql-dump-{{ item.name }}.service src=templates/postgresql-dump.service.j2
+  with_items: postgresql_dumper_databases
+
+- name: Timer unit
+  template: dest=/etc/systemd/system/postgresql-dump-{{ item.name }}.timer src=templates/postgresql-dump.timer.j2
+  with_items: postgresql_dumper_databases
+
+- name: Enable service
+  service: name=postgresql-dump-{{ item.name }}.timer state=running enabled=yes
+  with_items: postgresql_dumper_databases
+
+- name: Backup units
+  template: dest=/etc/systemd/system/postgresql-backup.{{ item }} src=templates/postgresql-backup.{{ item }}.j2
+  with_items:
+  - service
+  - timer
+
+- name: Enable backup timer
+  service: name=postgresql-backup.timer state=running enabled=yes
+
