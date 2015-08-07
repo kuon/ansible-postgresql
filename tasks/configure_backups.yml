@@ -17,11 +17,11 @@
   when: existing_units
 
 - name: Service unit
-  template: dest=/etc/systemd/system/postgresql-dump-{{ item.name }}.service src=templates/postgresql-dump.service.j2
+  template: dest=/etc/systemd/system/postgresql-dump-{{ item.name }}.service src=postgresql-dump.service.j2
   with_items: postgresql_dumper_databases
 
 - name: Timer unit
-  template: dest=/etc/systemd/system/postgresql-dump-{{ item.name }}.timer src=templates/postgresql-dump.timer.j2
+  template: dest=/etc/systemd/system/postgresql-dump-{{ item.name }}.timer src=postgresql-dump.timer.j2
   with_items: postgresql_dumper_databases
 
 - name: Enable service
@@ -29,7 +29,7 @@
   with_items: postgresql_dumper_databases
 
 - name: Backup units
-  template: dest=/etc/systemd/system/postgresql-backup.{{ item }} src=templates/postgresql-backup.{{ item }}.j2
+  template: dest=/etc/systemd/system/postgresql-backup.{{ item }} src=postgresql-backup.{{ item }}.j2
   with_items:
   - service
   - timer
