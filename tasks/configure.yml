@@ -41,6 +41,8 @@
 - name: Service file
   template: dest=/etc/systemd/system/postgresql.service src=postgresql.service.j2
 
+- name: Reload services
+  command: systemctl daemon-reload
 
 - name: Enable service
   service: name=postgresql state=running enabled=yes
