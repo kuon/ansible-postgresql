@@ -34,6 +34,9 @@
   - service
   - timer
 
+- name: Reload services
+  command: systemctl daemon-reload
+
 - name: Enable backup timer
   service: name=postgresql-backup.timer state=running enabled=yes
 
