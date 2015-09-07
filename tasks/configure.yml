@@ -48,3 +48,4 @@
   service: name=postgresql state=running enabled=yes
 
 - include: configure_backups.yml
+  tags: postgresql.configure_backups
