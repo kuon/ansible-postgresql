@@ -1,6 +1,8 @@
 PostgreSQL
 ==========
 
+**NOTE**: This project is not maintained and should not be used in production.
+
 Install and manage PostgreSQL instance.
 
 Requirements
